@@ -33,33 +33,16 @@ async function ensureDirectory() {
 }
 
 export async function getSettings() {
-  await ensureDirectory();
-  try {
-    const data = await fs.readFile(SETTINGS_PATH, 'utf-8');
-    const parsed = JSON.parse(data);
-    return { ...DEFAULT_SETTINGS, ...parsed };
-  } catch (error) {
-    try {
-      await fs.writeFile(SETTINGS_PATH, JSON.stringify(DEFAULT_SETTINGS, null, 2), 'utf-8');
-    } catch (writeError) {
-      console.error('Failed to write settings on fallback:', writeError);
-    }
-    return DEFAULT_SETTINGS;
-  }
+  // Settings are provided via environment variables and are read-only at runtime.
+  // Return the defaults (which already read from process.env above).
+  return { ...DEFAULT_SETTINGS };
 }
 
 export async function saveSettings(settings) {
-  await ensureDirectory();
-  let current = DEFAULT_SETTINGS;
-  try {
-    const data = await fs.readFile(SETTINGS_PATH, 'utf-8');
-    current = JSON.parse(data);
-  } catch (error) {
-    // Keep DEFAULT_SETTINGS if file doesn't exist or is invalid
-  }
-  const updated = { ...DEFAULT_SETTINGS, ...current, ...settings };
-  await fs.writeFile(SETTINGS_PATH, JSON.stringify(updated, null, 2), 'utf-8');
-  return updated;
+  // Do not allow writing settings at runtime when configuration is provided
+  // via environment variables. This function intentionally throws so callers
+  // (e.g. the settings API) can return an appropriate response.
+  throw new Error('Settings are read-only; update configuration via environment variables (.env)');
 }
 
 export async function getLogs() {

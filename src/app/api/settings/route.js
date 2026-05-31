@@ -16,29 +16,11 @@ export async function GET() {
 }
 
 export async function POST(request) {
-  try {
-    const body = await request.json();
-    
-    const numericFields = [
-      'makingChargePerGram',
-      'makingChargeFixed',
-      'fixedMarkup',
-      'markupPercentage',
-    ];
-    
-    const settingsUpdate = { ...body };
-    for (const field of numericFields) {
-      if (field in settingsUpdate) {
-        settingsUpdate[field] = parseFloat(settingsUpdate[field]) || 0;
-      }
-    }
-
-    const updatedSettings = await saveSettings(settingsUpdate);
-    return NextResponse.json(updatedSettings);
-  } catch (error) {
-    return NextResponse.json(
-      { error: error.message || 'Failed to update settings' },
-      { status: 500 }
-    );
-  }
+  // Settings are managed via environment variables and cannot be modified
+  // through the API at runtime. Return a 405 Method Not Allowed with a
+  // helpful message pointing the developer to the .env file.
+  return NextResponse.json(
+    { error: 'Settings are read-only. Update environment variables in your .env file.' },
+    { status: 405 }
+  );
 }

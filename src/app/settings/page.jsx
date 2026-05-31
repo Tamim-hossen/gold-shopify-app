@@ -8,6 +8,7 @@ export default function SettingsPage() {
   const { showToast } = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const readOnly = true; // Settings are provided via environment variables (.env)
   
   const [settings, setSettings] = useState({
     shopifyShop: '',
@@ -88,29 +89,16 @@ export default function SettingsPage() {
   }, [settings, simWeight, simKarat, simGoldPrice, simDiamondPrice]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setSettings((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    // Inputs are read-only when configuration comes from environment variables.
+    // Prevent local edits in the UI.
+    return;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
     try {
-      const res = await fetch('/api/settings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(settings),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Failed to save settings');
-      }
-
-      showToast('Settings saved successfully', 'success');
+      showToast('Settings are read-only. Update environment variables in your .env file.', 'info');
     } catch (error) {
       showToast(error.message || 'Error saving configurations', 'error');
     } finally {
@@ -138,6 +126,7 @@ export default function SettingsPage() {
       </header>
 
       <form onSubmit={handleSubmit} className="grid-2">
+        <fieldset disabled={readOnly} style={{ border: 'none', padding: 0 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div className="glass-card">
             <h2 className="card-title luxury-text">
@@ -322,6 +311,7 @@ export default function SettingsPage() {
             </div>
           </div>
         </div>
+        </fieldset>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div className="glass-card">
@@ -506,18 +496,8 @@ export default function SettingsPage() {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
-            <button type="submit" className="btn btn-primary" disabled={saving}>
-              {saving ? (
-                <>
-                  <RefreshCw className="animate-spin" size={18} />
-                  <span>Saving...</span>
-                </>
-              ) : (
-                <>
-                  <Save size={18} />
-                  <span>Save All Settings</span>
-                </>
-              )}
+            <button type="button" className="btn btn-secondary" disabled>
+              Update `.env` to change settings
             </button>
           </div>
         </div>
