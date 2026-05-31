@@ -1,0 +1,18 @@
+{
+  "shopifyShop": "https://aime-lis.myshopify.com/",
+  "shopifyAccessToken": "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",
+  "goldApiKey": "goldapi-2908cba197fae02806d45880bf5300c7-io",
+  "currency": "INR",
+  "defaultKarat": "18K",
+  "weightNamespace": "custom",
+  "weightKey": "gold_weight",
+  "karatNamespace": "custom",
+  "karatKey": "gold_karat",
+  "diamondNamespace": "custom",
+  "diamondKey": "diamond_price",
+  "gstPercentage": 3,
+  "makingChargePerGram": 1000,
+  "makingChargeFixed": 5000,
+  "fixedMarkup": 0,
+  "markupPercentage": 0
+}
