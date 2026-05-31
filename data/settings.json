@@ -1,7 +1,7 @@
 {
   "shopifyShop": "https://aime-lis.myshopify.com/",
-  "shopifyAccessToken": "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",
-  "goldApiKey": "goldapi-2908cba197fae02806d45880bf5300c7-io",
+  "shopifyAccessToken": "",
+  "goldApiKey": "",
   "currency": "INR",
   "defaultKarat": "18K",
   "weightNamespace": "custom",
